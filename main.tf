@@ -37,5 +37,26 @@ resource "aws_lb" "main" {
   )
 }
 
+resource "aws_lb_listener" "backend" {
+  count             = var.internal ? 1 : 0
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "NO_RULE"
+      status_code  = "503"
+    }
+  }
+}
+
+
+
+
+
 
 
